@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace HotelManagement.Controllers.Servieces
 {
-    public class HotelServieces : IHotel
+    public class HotelRepo : IHotel
     {
         private readonly AsyncInnDbContext _context;
-        public HotelServieces(AsyncInnDbContext context)
+        public HotelRepo(AsyncInnDbContext context)
         {
             _context = context;
         }
@@ -24,10 +24,10 @@ namespace HotelManagement.Controllers.Servieces
 
 
 
-        public async void DeleteHotel(int id)
+        public async Task Delete(int id)
         {
             Hotel hotel = await GetHotel(id);
-            _context.Entry(hotel).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            _context.Entry(hotel).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
 

@@ -1,4 +1,7 @@
+using HotelManagement.Controllers.Servieces;
 using HotelManagement.Data;
+using HotelManagement.Models.Interfaces;
+using HotelManagement.Models.Servieces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +33,9 @@ namespace HotelManagement
                 string connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
+            services.AddTransient<IHotel, HotelRepo>();
+            services.AddTransient<IRoom, RoomRepo>();
+            services.AddTransient<IAmenity, AmenityRepo>();
             services.AddControllers();
         }
 
