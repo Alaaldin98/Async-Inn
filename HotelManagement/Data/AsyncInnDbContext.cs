@@ -8,11 +8,15 @@ namespace HotelManagement.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
         public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<HotelRoom> HotelRoom { get; set; }
+        public DbSet<RoomAmenities> RoomAmenities { get; set; }
+
         public AsyncInnDbContext(DbContextOptions options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           
             // This calls the base method, but does nothing
             // base.OnModelCreating(modelBuilder);
 
@@ -31,7 +35,15 @@ namespace HotelManagement.Data
                 new Room { Id = 2, Name = "Double", Layout = "A room assigned to two people. May have one or more beds." },
                 new Room { Id = 3, Name = "Triple", Layout = "A room assigned to three people. May have two or more beds." }
                 );
-                
+            // add a FK to HotelRoom, as CK
+            modelBuilder.Entity<HotelRoom>().HasKey(
+               hr => new { hr.HotelId, hr.RoomNumber }
+           );
+
+            // add a FK to RoomAmenities, as CK
+            modelBuilder.Entity<RoomAmenities>().HasKey(
+                ra => new { ra.RoomID, ra.AmenitiesId }
+            );
 
         }
     }
