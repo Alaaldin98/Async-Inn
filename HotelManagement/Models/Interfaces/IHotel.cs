@@ -9,7 +9,7 @@ namespace HotelManagement.Models.Interfaces
         Task<List<Hotel>> GetHotels();
         Task<Hotel> GetHotel(int id);
         Task<Hotel> UpdateHotel (int id,Hotel hotel);
-        void DeleteHotel(int id);
+        Task Delete(int id);
 
     }
 }
