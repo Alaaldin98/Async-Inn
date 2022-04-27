@@ -3,6 +3,7 @@ using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -35,6 +36,9 @@ namespace HotelManagement.Models.Servieces
         public async Task<Room> GetRoom(int id)
         {
             Room room = await _context.Rooms.FindAsync(id);
+            var hotelroom = await _context.HotelRoom.Where(x => x.HotelId == id).Include(x => x.room)
+                .ToListAsync();
+            room.room = hotelroom;
             return room;
         }
 
@@ -55,6 +59,22 @@ namespace HotelManagement.Models.Servieces
             return room;
         }
 
-        
+        public async Task AddAmenityToRoom(int roomId, int amenityId)
+        {
+            RoomAmenity amenity = new RoomAmenity()
+            {
+                AmenityID = amenityId,
+                RoomID = roomId
+            };
+            _context.Entry(amenity).State = EntityState.Added; // because we are creating a new one
+            await _context.SaveChangesAsync();
+        }
+        public async Task RemoveAmenityFromRoom(int roomId, int amenityId)
+        {
+            var removedAmenity = await _context.RoomAmenities.FirstOrDefaultAsync(i => i.RoomID == roomId && i.AmenityID == amenityId);
+            _context.RoomAmenities.Remove(removedAmenity);
+            //_context.Entry(removedAmenity).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
+        }
     }
 }

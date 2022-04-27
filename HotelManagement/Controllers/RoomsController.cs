@@ -61,13 +61,17 @@ namespace HotelManagement.Controllers
             Room newRoom = await _room.Create(room);
             return Ok(newRoom);
         }
-
-        // DELETE: api/Rooms/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRoom(int id)
+        [HttpPost("{roomId}/Amenity/{amenityId}")]
+        public async Task<IActionResult> PostRoomAminity(int RoomId, int AmenityId)
         {
-            await _room.Delete(id);
-
+            await _room.AddAmenityToRoom(RoomId, AmenityId);
+            return NoContent();
+        }
+        // DELETE: api/Rooms/5
+        [HttpDelete("{roomId}/Amenity/{amenityId}")]
+        public async Task<IActionResult> DeleteRoomAminity(int roomId, int amenityId)
+            {
+            await _room.RemoveAmenityFromRoom(roomId, amenityId);
             return NoContent();
         }
 

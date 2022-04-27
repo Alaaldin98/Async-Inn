@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelManagement.Data;
 using HotelManagement.Models;
+using HotelManagement.Models.Interfaces;
 
 namespace HotelManagement.Controllers
 {
@@ -14,32 +15,27 @@ namespace HotelManagement.Controllers
     [ApiController]
     public class HotelRoomsController : ControllerBase
     {
-        private readonly AsyncInnDbContext _context;
+        private readonly IHotelRoom _hotelroom;
 
-        public HotelRoomsController(AsyncInnDbContext context)
+        public HotelRoomsController(IHotelRoom hotelroom)
         {
-            _HotelRoom = hotelRoom;
+            _hotelroom = hotelroom;
         }
 
         // GET: api/HotelRooms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HotelRoom>>> GetHotelRoom(int hotelID)
+        public async Task<ActionResult<IEnumerable<HotelRoom>>> GetHotelRooms()
         {
-        var hotelRooms = await _HotelRoom.GetHotelRooms(hotelID);
+        var hotelRooms = await _hotelroom.GetHotelRooms();
+            return Ok(hotelRooms);
         }
 
         // GET: api/HotelRooms/5
         [HttpGet("{hotelID}")]
         public async Task<ActionResult<HotelRoom>> GetHotelRoom(int hotelID)
         {
-            var hotelRoom = await _context.HotelRoom.FindAsync(id);
-
-            if (hotelRoom == null)
-            {
-                return NotFound();
-            }
-
-            return hotelRoom;
+            var hotelRooms = await _hotelroom.GetHotelRoom(hotelID);
+            return Ok(hotelRooms);
         }
 
         // PUT: api/HotelRooms/5
@@ -51,26 +47,8 @@ namespace HotelManagement.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(hotelRoom).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HotelRoomExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var updatedhotelRooms = await _hotelroom.UpdateHotelRoom(id,hotelRoom);
+            return Ok(updatedhotelRooms);
         }
 
         // POST: api/HotelRooms
@@ -78,45 +56,19 @@ namespace HotelManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<HotelRoom>> PostHotelRoom(HotelRoom hotelRoom)
         {
-            _context.HotelRoom.Add(hotelRoom);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (HotelRoomExists(hotelRoom.HotelId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetHotelRoom", new { id = hotelRoom.HotelId }, hotelRoom);
+            var createdhotelRooms = await _hotelroom.Create( hotelRoom);
+            return Ok(createdhotelRooms);
         }
 
         // DELETE: api/HotelRooms/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotelRoom(int id)
         {
-            var hotelRoom = await _context.HotelRoom.FindAsync(id);
-            if (hotelRoom == null)
-            {
-                return NotFound();
-            }
-
-            _context.HotelRoom.Remove(hotelRoom);
-            await _context.SaveChangesAsync();
+            await _hotelroom.Delete(id);
 
             return NoContent();
         }
 
-        private bool HotelRoomExists(int id)
-        {
-            return _context.HotelRoom.Any(e => e.HotelId == id);
-        }
+        
     }
 }
