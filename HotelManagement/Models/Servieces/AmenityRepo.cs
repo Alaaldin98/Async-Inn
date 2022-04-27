@@ -3,6 +3,7 @@ using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -37,8 +38,12 @@ namespace HotelManagement.Models.Servieces
 
         public async Task<Amenity> GetAmenity(int id)
         {
-            Amenity amenity = await _context.Amenities.FindAsync(id);
-            return amenity;
+            Amenity amenities = await _context.Amenities.FindAsync(id);
+            var roomamenities = await _context.RoomAmenities.Where(x => x.AmenitiesId == id)
+                .Include(x => x.amenity)
+                .ToListAsync();
+            amenities.amenity = roomamenities;
+            return amenities;
         }
 
         public async Task<Amenity> UpdateAmenity(int id, Amenity amenity)

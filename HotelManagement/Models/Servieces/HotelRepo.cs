@@ -3,6 +3,7 @@ using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HotelManagement.Controllers.Servieces
@@ -33,14 +34,25 @@ namespace HotelManagement.Controllers.Servieces
 
         public async Task<Hotel> GetHotel(int id)
         {
-            Hotel hotel = await _context.Hotels.FindAsync(id);
-           return hotel;
+            // Hotel hotel = await _context.Hotels.FindAsync(id);
+            //return hotel;
+            /*   Hotel hotel = await _context.Hotels.FindAsync(id);
+                var hotelroom = await _context.HotelRoom.Where(x => x.HotelId == id).Include(x => x.hotel)
+                    .ToListAsync();
+                hotel.hotel = hotelroom;
+                return hotel; */
+            return await _context.Hotels
+                                    .Include(e => e.hotel)
+                                    .ThenInclude(c => c.room)
+                                    .FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<List<Hotel>> GetHotels()
         {
-            var hotels = await _context.Hotels.ToListAsync();
-            return hotels;
+            return await _context.Hotels
+                                    .Include(e => e.hotel)
+                                    .ThenInclude(c => c.room)
+                                    .ToListAsync();
         }
 
         public async Task<Hotel> UpdateHotel(int id, Hotel hotel)

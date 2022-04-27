@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelManagement.Models
 {
@@ -13,6 +14,8 @@ namespace HotelManagement.Models
         public string Address { get; set; }
         [Required]
         public double Phone { get; set; }
+
+        public List<HotelRoom> hotel { get; set; }
 
     }
 }

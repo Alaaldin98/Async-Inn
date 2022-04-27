@@ -10,5 +10,6 @@ namespace HotelManagement.Models.Interfaces
         Task<Amenity> GetAmenity(int id);
         Task<Amenity> UpdateAmenity(int id, Amenity amenity);
         Task Delete(int id);
+
     }
 }

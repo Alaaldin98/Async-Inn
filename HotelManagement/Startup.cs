@@ -36,7 +36,10 @@ namespace HotelManagement
             services.AddTransient<IHotel, HotelRepo>();
             services.AddTransient<IRoom, RoomRepo>();
             services.AddTransient<IAmenity, AmenityRepo>();
-            services.AddControllers();
+            services.AddTransient<IHotelRoom, HotelRoomRepo>();
+            services.AddTransient<IRoomAmenities, RoomAmenitiesRepo>();
+            services.AddControllers().AddNewtonsoftJson(opt =>
+                        opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

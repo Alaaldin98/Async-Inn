@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelManagement.Data;
 using HotelManagement.Models;
+using HotelManagement.Models.Interfaces;
 
 namespace HotelManagement.Controllers
 {
@@ -14,32 +15,27 @@ namespace HotelManagement.Controllers
     [ApiController]
     public class RoomAmenitiesController : ControllerBase
     {
-        private readonly AsyncInnDbContext _context;
+        private readonly IRoomAmenities _roomamenities;
 
-        public RoomAmenitiesController(AsyncInnDbContext context)
+        public RoomAmenitiesController(IRoomAmenities roomamenities)
         {
-            _context = context;
+            _roomamenities = roomamenities;
         }
 
         // GET: api/RoomAmenities
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RoomAmenities>>> GetRoomAmenities()
         {
-            return await _context.RoomAmenities.ToListAsync();
+            var roomAmenities = await _roomamenities.GetRoomAmenities();
+            return Ok(roomAmenities);
         }
 
         // GET: api/RoomAmenities/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RoomAmenities>> GetRoomAmenities(int id)
+        public async Task<ActionResult<RoomAmenities>> GetRoomAmenity(int id)
         {
-            var roomAmenities = await _context.RoomAmenities.FindAsync(id);
-
-            if (roomAmenities == null)
-            {
-                return NotFound();
-            }
-
-            return roomAmenities;
+            var Course = await _roomamenities.GetRoomAmenity(id);
+            return Ok(Course);
         }
 
         // PUT: api/RoomAmenities/5
@@ -47,30 +43,12 @@ namespace HotelManagement.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoomAmenities(int id, RoomAmenities roomAmenities)
         {
-            if (id != roomAmenities.RoomID)
+            if (id != roomAmenities.RoomID && id != roomAmenities.AmenitiesId )
             {
-                return BadRequest();
+                return NoContent();
             }
-
-            _context.Entry(roomAmenities).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RoomAmenitiesExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var UpdateroomAmenities = await _roomamenities.UpdateRoomAmenities(id, roomAmenities);
+            return Ok(UpdateroomAmenities);
         }
 
         // POST: api/RoomAmenities
@@ -78,45 +56,18 @@ namespace HotelManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<RoomAmenities>> PostRoomAmenities(RoomAmenities roomAmenities)
         {
-            _context.RoomAmenities.Add(roomAmenities);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (RoomAmenitiesExists(roomAmenities.RoomID))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetRoomAmenities", new { id = roomAmenities.RoomID }, roomAmenities);
+            await _roomamenities.Create(roomAmenities);
+            return CreatedAtAction("GetCourse", new { id = roomAmenities.RoomID }, roomAmenities);
         }
 
         // DELETE: api/RoomAmenities/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoomAmenities(int id)
         {
-            var roomAmenities = await _context.RoomAmenities.FindAsync(id);
-            if (roomAmenities == null)
-            {
-                return NotFound();
-            }
-
-            _context.RoomAmenities.Remove(roomAmenities);
-            await _context.SaveChangesAsync();
-
+            await _roomamenities.Delete(id);
             return NoContent();
         }
 
-        private bool RoomAmenitiesExists(int id)
-        {
-            return _context.RoomAmenities.Any(e => e.RoomID == id);
-        }
+       
     }
 }

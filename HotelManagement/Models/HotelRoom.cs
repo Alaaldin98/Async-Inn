@@ -16,5 +16,8 @@ namespace HotelManagement.Models
         public decimal Rate { get; set; }
         [Required]
         public bool PetFriendly { get; set; }
+
+        public Hotel hotel { get; set; }
+        public Room room { get; set; }
     }
 }
