@@ -71,7 +71,7 @@ namespace HotelManagement.Controllers
         [HttpDelete("{roomId}/Amenity/{amenityId}")]
         public async Task<IActionResult> DeleteRoomAminity(int roomId, int amenityId)
             {
-            await _room.RemoveAmenityFromRoom(roomId, amenityId);
+            await _room.RemoveAmentityFromRoom(roomId, amenityId);
             return NoContent();
         }
 

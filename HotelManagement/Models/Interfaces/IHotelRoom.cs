@@ -5,10 +5,10 @@ namespace HotelManagement.Models.Interfaces
 {
     public interface IHotelRoom
     {
-        Task<HotelRoom> Create(HotelRoom hotelroom);
+        Task<HotelRoom> Create(int id, HotelRoom hotelroom);
         Task<List<HotelRoom>> GetHotelRooms();
-        Task<HotelRoom> GetHotelRoom(int id);
-        Task<HotelRoom> UpdateHotelRoom(int id, HotelRoom hotelroom);
-        Task Delete(int id);
+        Task<HotelRoom> GetHotelRoom(int id, int roomNumber);
+        Task<HotelRoom> UpdateHotelRoom(int id, int roomNumber, HotelRoom hotelroom);
+        Task Delete(int id, int roomNumber);
     }
 }
