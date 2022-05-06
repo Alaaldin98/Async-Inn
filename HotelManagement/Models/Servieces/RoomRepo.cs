@@ -1,9 +1,7 @@
 ﻿using HotelManagement.Data;
-using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -18,7 +16,7 @@ namespace HotelManagement.Models.Servieces
         }
         public async Task<Room> Create(Room room)
         {
-            _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(room).State = EntityState.Added;
             await _context.SaveChangesAsync();
             return room;
         }
@@ -35,23 +33,20 @@ namespace HotelManagement.Models.Servieces
 
         public async Task<Room> GetRoom(int id)
         {
-            Room room = await _context.Rooms.FindAsync(id);
-            var hotelroom = await _context.HotelRoom.Where(x => x.HotelId == id).Include(x => x.room)
-                .ToListAsync();
-            room.room = hotelroom;
-            return room;
+            return await _context.Rooms
+                                  .Include(a => a.roomamenity)
+                                  .ThenInclude(b => b.amenity)
+                                  .FirstOrDefaultAsync(x => x.Id == id);
+
         }
 
         public async Task<List<Room>> GetRooms()
         {
-            var rooms = await _context.Rooms.ToListAsync();
-            return rooms;
+            return await _context.Rooms
+                              .Include(a => a.roomamenity)
+                              .ThenInclude(b => b.amenity)
+                              .ToListAsync();
         }
-
-  
-
-       
-
         public async Task<Room> UpdateRoom(int id, Room room)
         {
             _context.Entry(room).State = EntityState.Modified;
@@ -61,9 +56,9 @@ namespace HotelManagement.Models.Servieces
 
         public async Task AddAmenityToRoom(int roomId, int amenityId)
         {
-            RoomAmenity amenity = new RoomAmenity()
+            RoomAmenities amenity = new RoomAmenities()
             {
-                AmenityID = amenityId,
+                AmenitiesId = amenityId,
                 RoomID = roomId
             };
             _context.Entry(amenity).State = EntityState.Added; // because we are creating a new one
@@ -71,10 +66,15 @@ namespace HotelManagement.Models.Servieces
         }
         public async Task RemoveAmenityFromRoom(int roomId, int amenityId)
         {
-            var removedAmenity = await _context.RoomAmenities.FirstOrDefaultAsync(i => i.RoomID == roomId && i.AmenityID == amenityId);
+            var removedAmenity = await _context.RoomAmenities.FirstOrDefaultAsync(i => i.RoomID == roomId && i.AmenitiesId == amenityId);
             _context.RoomAmenities.Remove(removedAmenity);
             //_context.Entry(removedAmenity).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
+        }
+
+        public Task RemoveAmentityFromRoom(int roomId, int amenityId)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

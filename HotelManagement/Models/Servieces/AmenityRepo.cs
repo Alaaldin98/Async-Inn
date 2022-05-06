@@ -18,7 +18,7 @@ namespace HotelManagement.Models.Servieces
         }
         public async Task<Amenity> Create(Amenity amenity)
         {
-            _context.Entry(amenity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(amenity).State = EntityState.Added;
             await _context.SaveChangesAsync();
             return amenity;
         }
@@ -32,18 +32,17 @@ namespace HotelManagement.Models.Servieces
 
         public async Task<List<Amenity>> GetAmenities()
         {
-            var amenities = await _context.Amenities.ToListAsync();
-            return amenities;
+            return await _context.Amenities.Include(x => x.amenity)
+                                        .ThenInclude(x => x.room)
+                                        .ToListAsync();
         }
 
         public async Task<Amenity> GetAmenity(int id)
         {
-            Amenity amenities = await _context.Amenities.FindAsync(id);
-            var roomamenities = await _context.RoomAmenities.Where(x => x.AmenitiesId == id)
-                .Include(x => x.amenity)
-                .ToListAsync();
-            amenities.amenity = roomamenities;
-            return amenities;
+            return await _context.Amenities.Include(x => x.amenity)
+                                         .ThenInclude(x => x.room)
+                                         .FirstOrDefaultAsync(x => x.Id == id);
+
         }
 
         public async Task<Amenity> UpdateAmenity(int id, Amenity amenity)
