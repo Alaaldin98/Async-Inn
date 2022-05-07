@@ -9,6 +9,7 @@ using HotelManagement.Data;
 using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
 using HotelManagement.Models.Servieces;
+using HotelManagement.Models.DTO;
 
 namespace HotelManagement.Controllers
 {
@@ -25,7 +26,7 @@ namespace HotelManagement.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<HotelRoomDTO>>> GetHotels()
         {
             var hotels = await _hotel.GetHotels();
             return Ok(hotels);
@@ -33,9 +34,9 @@ namespace HotelManagement.Controllers
 
         // GET: api/Hotels/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Hotel>> GetHotel(int id)
+        public async Task<ActionResult<HotelDTO>> GetHotel(int id)
         {
-            Hotel hotel = await _hotel.GetHotel(id);
+            HotelDTO hotel = await _hotel.GetHotel(id);
             return Ok(hotel);
         }
 
@@ -49,17 +50,17 @@ namespace HotelManagement.Controllers
                 return BadRequest();
             }
 
-            var modifiedStudent = await _hotel.UpdateHotel(id, hotel);
+            var modifiedHotel = await _hotel.UpdateHotel(id, hotel);
 
-            return Ok(modifiedStudent);
+            return Ok(modifiedHotel);
         }
 
         // POST: api/Hotels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
+        public async Task<ActionResult<Hotel>> PostHotel(HotelDTO hotel)
         {
-            Hotel newHotel = await _hotel.Create(hotel);
+            HotelDTO newHotel = await _hotel.Create(hotel);
             return Ok(newHotel);
         }
 

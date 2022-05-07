@@ -22,10 +22,10 @@ namespace HotelManagement.Data
             // base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Hotel>().HasData(
-              new Hotel { Id = 1, Name = "Life Hotel",Address ="Amman",Phone =0782625620 },
-              new Hotel { Id = 2, Name = "7Star Hotel",Address ="Irbid",Phone =0797645630 },
-              new Hotel { Id = 3, Name = "Mina Hotel",Address ="Aqaba",Phone =0868763450 },
-              new Hotel {Id = 4, Name = "Jarash Hotel", Address = "Jarash", Phone = 75345626}
+              new Hotel { Id = 1, Name = "Life Hotel",Address ="Amman",Phone ="0782625620", StreetAddress = "Real street", City = "Amman", State = "dlkg", Country = "Jordan" },
+              new Hotel { Id = 2, Name = "7Star Hotel",Address ="Irbid",Phone ="0797645630", StreetAddress = "north street ", City = "irbid", State = "Illinois", Country = "Jordan" },
+              new Hotel { Id = 3, Name = "Mina Hotel",Address ="Aqaba",Phone = "0868763450", StreetAddress = "south street", City = "aqaba", State = "dczds", Country = "Jordan" },
+              new Hotel {Id = 4, Name = "Jarash Hotel", Address = "Jarash", Phone = "075345626", StreetAddress = "yarmouk treet", City = "sjarash", State = "Illidfs", Country = "Jordan" }
             );
             modelBuilder.Entity<Amenity>().HasData(
                 new Amenity { Id = 1, Name = "Personal care" },
@@ -33,9 +33,9 @@ namespace HotelManagement.Data
                 new Amenity { Id = 3, Name = "Tissue box" }
             );
             modelBuilder.Entity<Room>().HasData(
-                new Room { Id = 1, Name = "Single", layout = 0 },
-                new Room { Id = 2, Name = "Double", layout = (Layout)1 },
-                new Room { Id = 3, Name = "Triple", layout = (Layout)1 }
+                new Room { Id = 1, Name = "Single", layout = "One single bed " },
+                new Room { Id = 2, Name = "Double", layout = "Two single bed " },
+                new Room { Id = 3, Name = "Triple", layout = "Three single bed "  }
                 );
             // add a FK to HotelRoom, as CK
             modelBuilder.Entity<HotelRoom>().HasKey(

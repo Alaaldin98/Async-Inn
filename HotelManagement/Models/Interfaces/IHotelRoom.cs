@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using HotelManagement.Models.DTO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HotelManagement.Models.Interfaces
 {
     public interface IHotelRoom
     {
-        Task<HotelRoom> Create(int id, HotelRoom hotelroom);
-        Task<List<HotelRoom>> GetHotelRooms();
+        Task<HotelRoomDTO> Create(int id, HotelRoomDTO hotelroom);
+        Task<List<HotelRoomDTO>> GetHotelRooms(int hotelId);
         Task<HotelRoom> GetHotelRoom(int id, int roomNumber);
-        Task<HotelRoom> UpdateHotelRoom(int id, int roomNumber, HotelRoom hotelroom);
+        Task<HotelRoomDTO> UpdateHotelRoom(int id, int roomNumber, HotelRoomDTO hotelroom);
         Task Delete(int id, int roomNumber);
     }
 }

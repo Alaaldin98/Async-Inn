@@ -23,23 +23,12 @@ namespace HotelManagement.Models.Servieces
             {
                 Id = room.ID,
                 Name = room.Name,
-                layout = (Layout)Enum.Parse(typeof(Layout), room.Layout)
+                layout = room.Layout
             };
             _context.Entry(room1).State = EntityState.Added;
             await _context.SaveChangesAsync();
             return room;
         }
-
-
-
-
-        public async Task Delete(int id)
-        {
-            Room room = await _context.Rooms.FindAsync(id);
-            _context.Entry(room).State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<RoomDTO> GetRoom(int id)
         {
             return await _context.Rooms
@@ -81,7 +70,7 @@ namespace HotelManagement.Models.Servieces
             {
                 Id = room.ID,
                 Name = room.Name,
-                layout = (Layout)Enum.Parse(typeof(Layout), room.Layout)
+                layout = room.Layout
             };
             _context.Entry(room1).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -103,6 +92,12 @@ namespace HotelManagement.Models.Servieces
             var removedAmenity = await _context.RoomAmenities.FirstOrDefaultAsync(i => i.RoomID == roomId && i.AmenitiesId == amenityId);
             _context.RoomAmenities.Remove(removedAmenity);
             //_context.Entry(removedAmenity).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
+        }
+        public async Task Delete(int id)
+        {
+            Room room = await _context.Rooms.FindAsync(id);
+            _context.Entry(room).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
     }

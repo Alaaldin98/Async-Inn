@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using HotelManagement.Models.DTO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HotelManagement.Models.Interfaces
 {
     public interface IAmenity
     {
-        Task<Amenity> Create(Amenity amenity);
-        Task<List<Amenity>> GetAmenities();
-        Task<Amenity> GetAmenity(int id);
-        Task<Amenity> UpdateAmenity(int id, Amenity amenity);
+        Task<AmenityDTO> Create(AmenityDTO amenity);
+        Task<List<AmenityDTO>> GetAmenities();
+        Task<AmenityDTO> GetAmenity(int id);
+        Task<AmenityDTO> UpdateAmenity(int id, AmenityDTO amenity);
         Task Delete(int id);
 
     }

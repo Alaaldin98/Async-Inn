@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using HotelManagement.Models.DTO;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HotelManagement.Models
@@ -10,14 +12,9 @@ namespace HotelManagement.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public Layout layout { get; set; }
-        public List<HotelRoom> room { get; set; }
+        public string layout { get; set; }
+        public List<HotelRoom> hotelrooms { get; set; }
         public List<RoomAmenities> roomamenity { get; set; }
-        public enum Layout
-        {
-            studio,
-            onebedroom,
-            twobedroom
-        }
+       
     }
 }
