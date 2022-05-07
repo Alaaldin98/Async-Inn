@@ -1,5 +1,6 @@
 ﻿using HotelManagement.Models;
 using Microsoft.EntityFrameworkCore;
+using static HotelManagement.Models.Room;
 
 namespace HotelManagement.Data
 {
@@ -23,7 +24,8 @@ namespace HotelManagement.Data
             modelBuilder.Entity<Hotel>().HasData(
               new Hotel { Id = 1, Name = "Life Hotel",Address ="Amman",Phone =0782625620 },
               new Hotel { Id = 2, Name = "7Star Hotel",Address ="Irbid",Phone =0797645630 },
-              new Hotel { Id = 3, Name = "Mina Hotel",Address ="Aqaba",Phone =0868763450 }
+              new Hotel { Id = 3, Name = "Mina Hotel",Address ="Aqaba",Phone =0868763450 },
+              new Hotel {Id = 4, Name = "Jarash Hotel", Address = "Jarash", Phone = 75345626}
             );
             modelBuilder.Entity<Amenity>().HasData(
                 new Amenity { Id = 1, Name = "Personal care" },
@@ -31,9 +33,9 @@ namespace HotelManagement.Data
                 new Amenity { Id = 3, Name = "Tissue box" }
             );
             modelBuilder.Entity<Room>().HasData(
-                new Room { Id = 1, Name = "Single", Layout = "A room assigned to one person. May have one or more beds." },
-                new Room { Id = 2, Name = "Double", Layout = "A room assigned to two people. May have one or more beds." },
-                new Room { Id = 3, Name = "Triple", Layout = "A room assigned to three people. May have two or more beds." }
+                new Room { Id = 1, Name = "Single", layout = 0 },
+                new Room { Id = 2, Name = "Double", layout = (Layout)1 },
+                new Room { Id = 3, Name = "Triple", layout = (Layout)1 }
                 );
             // add a FK to HotelRoom, as CK
             modelBuilder.Entity<HotelRoom>().HasKey(

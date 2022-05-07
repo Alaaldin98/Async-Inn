@@ -10,8 +10,14 @@ namespace HotelManagement.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Layout { get; set; }
+        public Layout layout { get; set; }
         public List<HotelRoom> room { get; set; }
         public List<RoomAmenities> roomamenity { get; set; }
+        public enum Layout
+        {
+            studio,
+            onebedroom,
+            twobedroom
+        }
     }
 }
