@@ -25,7 +25,7 @@ namespace HotelManagement.Controllers
 
         // GET: api/Rooms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
+        public async Task<ActionResult<IEnumerable<RoomDTO>>> GetRooms()
         {
             var rooms = await _room.GetRooms();
             return Ok(rooms);
@@ -49,7 +49,7 @@ namespace HotelManagement.Controllers
                 return BadRequest();
             }
 
-            var modifiedRoom = await _room.UpdateRoom(id, room);
+            RoomDTO modifiedRoom = await _room.UpdateRoom(id, room);
 
             return Ok(modifiedRoom);
         }
@@ -57,7 +57,7 @@ namespace HotelManagement.Controllers
         // POST: api/Rooms
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Room>> PostRoom(RoomDTO room)
+        public async Task<ActionResult<RoomDTO>> PostRoom(RoomDTO room)
         {
             RoomDTO newRoom = await _room.Create(room);
             return Ok(newRoom);
@@ -75,7 +75,26 @@ namespace HotelManagement.Controllers
             await _room.RemoveAmentityFromRoom(roomId, amenityId);
             return NoContent();
         }
+        // POST : api/Rooms/5/Amenity/5
+        [HttpPost]
+        [Route("{roomId}/Amenity/{amenityId}")]
+        public async Task<IActionResult> AddAmenityToRoom(int roomId, int amenityId)
+        {
+            await _room.AddAmenityToRoom(roomId, amenityId);
 
-        
+            return NoContent();
+        }
+
+        // DELETE : api/Rooms/5/Amenity/5
+        [HttpDelete]
+        [Route("{roomId}/Amenity/{amenityId}")]
+        public async Task<IActionResult> RemoveAmentityFromRoom(int roomId, int amenityId)
+        {
+            await _room.RemoveAmentityFromRoom(roomId, amenityId);
+
+            return NoContent();
+        }
+
+
     }
 }

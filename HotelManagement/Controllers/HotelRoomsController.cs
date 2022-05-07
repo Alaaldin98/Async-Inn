@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HotelManagement.Data;
 using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
+using HotelManagement.Models.DTO;
 
 namespace HotelManagement.Controllers
 {
@@ -24,9 +25,10 @@ namespace HotelManagement.Controllers
 
         // GET: api/HotelRoom/{hotelId}/Rooms
         [HttpGet("{hotelId}/Rooms")]
-        public async Task<ActionResult<IEnumerable<HotelRoom>>> GetHotelRooms()
+        public async Task<ActionResult<IEnumerable<HotelRoomDTO>>> GetHotelRooms(int hotelId)
         {
-            return Ok(await _hotelroom.GetHotelRooms());
+            var hotelRooms = await _hotelroom.GetHotelRooms(hotelId);
+            return Ok(hotelRooms);
 
         }
 
@@ -47,9 +49,9 @@ namespace HotelManagement.Controllers
         // PUT: api/HotelRooms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{hotelId}/Rooms/{roomNumber}")]
-        public async Task<IActionResult> PutHotelRoom(int id, int RoomNumber, HotelRoom hotelRoom)
+        public async Task<IActionResult> PutHotelRoom(int id, int RoomNumber, HotelRoomDTO hotelRoom)
         {
-            if (id != hotelRoom.HotelId && RoomNumber != hotelRoom.RoomNumber)
+            if (id != hotelRoom.HotelID && RoomNumber != hotelRoom.RoomNumber)
             {
                 return BadRequest();
             }
@@ -60,9 +62,9 @@ namespace HotelManagement.Controllers
         // POST: api/HotelRooms
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("{hotelId}/Rooms")]
-        public async Task<ActionResult<HotelRoom>> PostHotelRoom(int id ,HotelRoom hotelRoom)
+        public async Task<ActionResult<HotelRoom>> PostHotelRoom(int id ,HotelRoomDTO hotelRoom)
         {
-            HotelRoom newHotelRoom = await _hotelroom.Create(id, hotelRoom);
+            var newHotelRoom = await _hotelroom.Create(id, hotelRoom);
             return Ok(newHotelRoom);
         }
 
