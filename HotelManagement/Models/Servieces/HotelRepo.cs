@@ -15,9 +15,10 @@ namespace HotelManagement.Controllers.Servieces
         {
             _context = context;
         }
+
         public async Task<Hotel> Create(Hotel hotel)
         {
-            _context.Entry(hotel).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(hotel).State = Microsoft.EntityFrameworkCore.EntityState.Added;
             await _context.SaveChangesAsync();
             return hotel;
         }
