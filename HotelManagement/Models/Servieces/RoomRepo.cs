@@ -1,9 +1,12 @@
 ﻿using HotelManagement.Data;
+using HotelManagement.Models.DTO;
 using HotelManagement.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-
+using static HotelManagement.Models.Room;
 
 namespace HotelManagement.Models.Servieces
 {
@@ -14,9 +17,15 @@ namespace HotelManagement.Models.Servieces
         {
             _context = context;
         }
-        public async Task<Room> Create(Room room)
+        public async Task<RoomDTO> Create(RoomDTO room)
         {
-            _context.Entry(room).State = EntityState.Added;
+            Room room1 = new Room
+            {
+                Id = room.ID,
+                Name = room.Name,
+                layout = (Layout)Enum.Parse(typeof(Layout), room.Layout)
+            };
+            _context.Entry(room1).State = EntityState.Added;
             await _context.SaveChangesAsync();
             return room;
         }
@@ -26,30 +35,55 @@ namespace HotelManagement.Models.Servieces
 
         public async Task Delete(int id)
         {
-            Room room = await GetRoom(id);
+            Room room = await _context.Rooms.FindAsync(id);
             _context.Entry(room).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Room> GetRoom(int id)
+        public async Task<RoomDTO> GetRoom(int id)
         {
             return await _context.Rooms
-                                  .Include(a => a.roomamenity)
-                                  .ThenInclude(b => b.amenity)
-                                  .FirstOrDefaultAsync(x => x.Id == id);
 
+              .Select(room => new RoomDTO
+              {
+                  ID = id,
+                  Name = room.Name,
+                  Layout = room.layout.ToString(),
+                  Amenities = room.roomamenity
+                   .Select(amenity => new AmenityDTO
+                   {
+                       ID = id,
+                       Name = amenity.room.Name,
+                   }).ToList()
+              }).FirstOrDefaultAsync(a => a.ID == id);
         }
 
-        public async Task<List<Room>> GetRooms()
+        public async Task<List<RoomDTO>> GetRooms()
         {
             return await _context.Rooms
-                              .Include(a => a.roomamenity)
-                              .ThenInclude(b => b.amenity)
-                              .ToListAsync();
+
+                .Select(room => new RoomDTO
+                {
+                    ID = room.Id,
+                    Name = room.Name,
+                    Layout = room.layout.ToString(),
+                    Amenities = room.roomamenity
+                     .Select(amenity => new AmenityDTO
+                     {
+                         ID = amenity.AmenitiesId,
+                         Name = amenity.room.Name,
+                     }).ToList()
+                }).ToListAsync();
         }
-        public async Task<Room> UpdateRoom(int id, Room room)
+        public async Task<RoomDTO> UpdateRoom(int id, RoomDTO room)
         {
-            _context.Entry(room).State = EntityState.Modified;
+            Room room1 = new Room
+            {
+                Id = room.ID,
+                Name = room.Name,
+                layout = (Layout)Enum.Parse(typeof(Layout), room.Layout)
+            };
+            _context.Entry(room1).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return room;
         }
@@ -64,17 +98,12 @@ namespace HotelManagement.Models.Servieces
             _context.Entry(amenity).State = EntityState.Added; // because we are creating a new one
             await _context.SaveChangesAsync();
         }
-        public async Task RemoveAmenityFromRoom(int roomId, int amenityId)
+        public async Task RemoveAmentityFromRoom(int roomId, int amenityId)
         {
             var removedAmenity = await _context.RoomAmenities.FirstOrDefaultAsync(i => i.RoomID == roomId && i.AmenitiesId == amenityId);
             _context.RoomAmenities.Remove(removedAmenity);
             //_context.Entry(removedAmenity).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
-        }
-
-        public Task RemoveAmentityFromRoom(int roomId, int amenityId)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

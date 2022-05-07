@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HotelManagement.Data;
 using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
+using HotelManagement.Models.DTO;
 
 namespace HotelManagement.Controllers
 {
@@ -32,18 +33,18 @@ namespace HotelManagement.Controllers
 
         // GET: api/Rooms/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Room>> GetRoom(int id)
+        public async Task<ActionResult<RoomDTO>> GetRoom(int id)
         {
-            Room room = await _room.GetRoom(id);
+            RoomDTO room = await _room.GetRoom(id);
             return Ok(room);
         }
 
         // PUT: api/Rooms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom(int id, Room room)
+        public async Task<IActionResult> PutRoom(int id, RoomDTO room)
         {
-            if (id != room.Id)
+            if (id != room.ID)
             {
                 return BadRequest();
             }
@@ -56,9 +57,9 @@ namespace HotelManagement.Controllers
         // POST: api/Rooms
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Room>> PostRoom(Room room)
+        public async Task<ActionResult<Room>> PostRoom(RoomDTO room)
         {
-            Room newRoom = await _room.Create(room);
+            RoomDTO newRoom = await _room.Create(room);
             return Ok(newRoom);
         }
         [HttpPost("{roomId}/Amenity/{amenityId}")]
