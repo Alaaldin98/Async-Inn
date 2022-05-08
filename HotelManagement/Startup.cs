@@ -1,10 +1,12 @@
 using HotelManagement.Controllers.Servieces;
 using HotelManagement.Data;
+using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
 using HotelManagement.Models.Servieces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,15 +30,29 @@ namespace HotelManagement
        
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+            
+.AddEntityFrameworkStores<AsyncInnDbContext>();
+
+            
+
+
+
+
+
             services.AddDbContext<AsyncInnDbContext>(options => {
                 // Our DATABASE_URL from js days
                 string connectionString = Configuration.GetConnectionString("DefaultConnection");
+               
                 options.UseSqlServer(connectionString);
             });
             services.AddTransient<IHotel, HotelRepo>();
             services.AddTransient<IRoom, RoomRepo>();
             services.AddTransient<IAmenity, AmenityRepo>();
             services.AddTransient<IHotelRoom, HotelRoomRepo>();
+            services.AddTransient<IUserService, IdentityUserService>();
+
             services.AddControllers().AddNewtonsoftJson(opt =>
                         opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddControllers(); // register my controller

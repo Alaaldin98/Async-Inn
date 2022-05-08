@@ -1,10 +1,11 @@
 ﻿using HotelManagement.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using static HotelManagement.Models.Room;
 
 namespace HotelManagement.Data
 {
-    public class AsyncInnDbContext : DbContext
+    public class AsyncInnDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
@@ -19,7 +20,7 @@ namespace HotelManagement.Data
         {
            
             // This calls the base method, but does nothing
-            // base.OnModelCreating(modelBuilder);
+         base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Hotel>().HasData(
               new Hotel { Id = 1, Name = "Life Hotel",Address ="Amman",Phone ="0782625620", StreetAddress = "Real street", City = "Amman", State = "dlkg", Country = "Jordan" },
