@@ -18,13 +18,26 @@ namespace HotelManagement.Models.Servieces
         {
             userManager = manager;
         }
-        public Task<UserDTO> Authenticate(string username, string password)
+        public async Task<UserDTO> Authenticate(string username, string password)
         {
-           
-            throw new System.NotImplementedException();
+
+            var user = await userManager.FindByNameAsync(username);
+            if (user != null)
+            {
+                if (await userManager.CheckPasswordAsync(user, password))
+                {
+                    UserDTO userDto = new UserDTO
+                    {
+                        Id = user.Id,
+                        Username = user.UserName,
+                    };
+                    return userDto;
+                }
+            }
+            return null;
         }
 
-        public async Task Register(RegisterUserDTO data, ModelStateDictionary modelState)
+        public async Task<UserDTO> Register(RegisterUserDTO data, ModelStateDictionary modelState)
         {
             var userDTO = new ApplicationUser
             {
@@ -41,7 +54,12 @@ namespace HotelManagement.Models.Servieces
 
             if (result.Succeeded)
             {
-                return ;
+                UserDTO userDto = new UserDTO
+                {
+                    Id = userDTO.Id,
+                    Username = userDTO.UserName,
+                };
+                return userDto;
             }
 
             foreach (var error in result.Errors)
@@ -53,7 +71,7 @@ namespace HotelManagement.Models.Servieces
                     "";
                 modelState.AddModelError(errorKey, error.Description);
             }
-            return;
+            return null;
         }   
     }
 }

@@ -19,7 +19,7 @@ namespace HotelManagement.Controllers
             _userService = userService;
         }
         [HttpPost("Register")]
-        public async Task<ActionResult> Register([FromBody] RegisterUserDTO data)
+        public async Task<ActionResult<UserDTO>> Register([FromBody] RegisterUserDTO data)
         {
             try
             {
