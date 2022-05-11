@@ -52,3 +52,18 @@ Object Oriented design is the process of creating self-sufficient objects having
 - ##### Service-Oriented Architecture (SOA)
 SOA is nothing but an Application that provides services to other applications independent of any platform or technology that exposes and consumes functionality as a service using contracts and messages.
 
+### Identity
+ASP.NET Core Identity provides a framework for managing and storing user accounts in ASP.NET Core apps. Identity is added to your project when Individual User Accounts is selected as the authentication mechanism. By default, Identity makes use of an Entity Framework (EF) Core data model
+
+#### Register
+![](Screenshot1.png)
+#### login user not found
+![](Screenshot2.png)
+#### login sucsisfuly
+![](Screenshot3.png)
+#### user name is already taken
+![](Screenshot4.png)
+#### missing email
+![](Screenshot5.png)
+#### password not strong
+![](Screenshot6.png)
