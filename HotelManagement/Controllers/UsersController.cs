@@ -1,6 +1,7 @@
 ﻿using HotelManagement.Models;
 using HotelManagement.Models.DTO;
 using HotelManagement.Models.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,6 +19,7 @@ namespace HotelManagement.Controllers
         {
             _userService = userService;
         }
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<ActionResult<UserDTO>> Register([FromBody] RegisterUserDTO data)
         {
@@ -40,7 +42,7 @@ namespace HotelManagement.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<ActionResult<UserDTO>> Login(LoginData loginData)
         {

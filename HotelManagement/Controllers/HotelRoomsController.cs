@@ -9,6 +9,7 @@ using HotelManagement.Data;
 using HotelManagement.Models;
 using HotelManagement.Models.Interfaces;
 using HotelManagement.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelManagement.Controllers
 {
@@ -24,6 +25,8 @@ namespace HotelManagement.Controllers
         }
 
         // GET: api/HotelRoom/{hotelId}/Rooms
+        [Authorize(Policy = "read")]
+
         [HttpGet("{hotelId}/Rooms")]
         public async Task<ActionResult<IEnumerable<HotelRoomDTO>>> GetHotelRooms(int hotelId)
         {
@@ -33,6 +36,8 @@ namespace HotelManagement.Controllers
         }
 
         // GET: api/HotelRoom/{hotelId}/Rooms/{roomNumber}
+        [Authorize(Policy = "read")]
+
         [HttpGet("{hotelId}/Rooms/{roomNumber}")]
         public async Task<ActionResult<HotelRoom>> GetHotelRoom(int HotelID, int RoomNumber)
         {
@@ -47,7 +52,10 @@ namespace HotelManagement.Controllers
         }
 
         // PUT: api/HotelRooms/5
+       
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Policy = "update")]
+
         [HttpPut("{hotelId}/Rooms/{roomNumber}")]
         public async Task<IActionResult> PutHotelRoom(int id, int RoomNumber, HotelRoomDTO hotelRoom)
         {
@@ -69,6 +77,8 @@ namespace HotelManagement.Controllers
         }
 
         // DELETE: api/HotelRooms/5
+        [Authorize(Policy = "delete")]
+
         [HttpDelete("{hotelId}/Rooms/{roomNumber}")]
         public async Task<IActionResult> DeleteHotelRoom(int HotelID, int RoomNumber)
         {
