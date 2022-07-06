@@ -67,3 +67,6 @@ ASP.NET Core Identity provides a framework for managing and storing user account
 ![](Screenshot5.png)
 #### password not strong
 ![](Screenshot6.png)
+
+#### Add Test
+![](HotelTest.png)
